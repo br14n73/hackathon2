@@ -1,5 +1,6 @@
 package com.intertechlgbt.markup;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,6 +21,11 @@ public class MarkupDAO {
 
     public MarkupDAO(DataSource ds) {
         this.jdbcTemplate = new JdbcTemplate(ds);
+        BasicDataSource ds1 = new BasicDataSource();
+        ds1.setDriverClassName("oracle.jdbc.driver.OracleDriver");
+        ds1.setUsername("scott");
+        ds1.setPassword("tiger");
+        ds1.setUrl("");
     }
 
     public UserPronounPreferences loadUserPronounPreferences(final String userId) {
