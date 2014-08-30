@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * Created by scaladojo on 30/08/2014.
  */
+@Service
 public class MarkupDAO {
 
     private JdbcTemplate jdbcTemplate;
@@ -24,12 +25,12 @@ public class MarkupDAO {
 	private String url;
 	private String table;
 	
-    public MarkupDAO(DataSource ds) {
+    public MarkupDAO() {
+    	//assuming server run using java -cp ../lib/hsqldb.jar org.hsqldb.Server -database.0 mydb -dbname.0 xdb
 		this.user = "sa";
 		this.password = "";
 		this.url = "jdbc:hsqldb:hsql://localhost/xdb";
 		this.table = "UserPronounPreferences";
-        //this.jdbcTemplate = new JdbcTemplate(ds);
         BasicDataSource ds1 = new BasicDataSource();
         ds1.setDriverClassName("org.hsqldb.jdbcDriver");
         ds1.setUsername(user);
@@ -39,7 +40,7 @@ public class MarkupDAO {
     }
 
     public UserPronounPreferences loadUserPronounPreferences(final String userId) {
-        List<UserPronounPreferences> resultList = this.jdbcTemplate.query("select they,them,their,themselves,their from UserPronounPreferences where userId=?",
+        List<UserPronounPreferences> resultList = this.jdbcTemplate.query("select they,them,their,themselves,their from UserPronounPreferences where userId=" + userId,
                 new Object[] {userId}, new RowMapper<UserPronounPreferences>() {
                     @Override
                     public UserPronounPreferences mapRow(ResultSet rs, int i) throws SQLException {
@@ -59,7 +60,7 @@ public class MarkupDAO {
     }
 
     public void saveUserPronounPreferences(UserPronounPreferences userPronounPreferences) {
-        this.jdbcTemplate.update("delete from UserPronounPreferences where userId=?");
+        this.jdbcTemplate.update("delete from UserPronounPreferences where userId=" + userPronounPreferences.getUserId());
         this.jdbcTemplate.update("insert into UserPronounPreferences (userId,they,them,their,themselves,theirs) values (?,?,?,?,?,?)",
                 userPronounPreferences.getUserId(), userPronounPreferences.getPronouns().getThey(),userPronounPreferences.getPronouns().getThem(),
                 userPronounPreferences.getPronouns().getTheir(), userPronounPreferences.getPronouns().getThemselves(), userPronounPreferences.getPronouns().getTheirs());

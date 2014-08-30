@@ -28,6 +28,7 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework:spring-jdbc:4.0.6.RELEASE")
+    compile("org.hsqldb:hsqldb:2.3.2")
     compile("commons-dbcp:commons-dbcp:1.4")
     testCompile("junit:junit")
 }
