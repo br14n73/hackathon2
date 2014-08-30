@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.5.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.5.RELEASE","org.springframework:spring-jdbc:4.0.6.RELEASE")
     }
 }
 
@@ -27,6 +27,8 @@ repositories {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework:spring-jdbc:4.0.6.RELEASE")
+    compile("commons-dbcp:commons-dbcp:1.4")
     testCompile("junit:junit")
 }
 
