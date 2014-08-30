@@ -40,7 +40,7 @@ public class MarkupDAO {
     }
 
     public UserPronounPreferences loadUserPronounPreferences(final String userId) {
-        List<UserPronounPreferences> resultList = this.jdbcTemplate.query("select they,them,their,themselves,their from UserPronounPreferences where userId=" + userId,
+        List<UserPronounPreferences> resultList = this.jdbcTemplate.query("select they,them,their,themselves,theirs from UserPronounPreferences where userId=?",
                 new Object[] {userId}, new RowMapper<UserPronounPreferences>() {
                     @Override
                     public UserPronounPreferences mapRow(ResultSet rs, int i) throws SQLException {
@@ -60,7 +60,7 @@ public class MarkupDAO {
     }
 
     public void saveUserPronounPreferences(UserPronounPreferences userPronounPreferences) {
-        this.jdbcTemplate.update("delete from UserPronounPreferences where userId=" + userPronounPreferences.getUserId());
+        this.jdbcTemplate.update("delete from UserPronounPreferences where userId=?",userPronounPreferences.getUserId());
         this.jdbcTemplate.update("insert into UserPronounPreferences (userId,they,them,their,themselves,theirs) values (?,?,?,?,?,?)",
                 userPronounPreferences.getUserId(), userPronounPreferences.getPronouns().getThey(),userPronounPreferences.getPronouns().getThem(),
                 userPronounPreferences.getPronouns().getTheir(), userPronounPreferences.getPronouns().getThemselves(), userPronounPreferences.getPronouns().getTheirs());
