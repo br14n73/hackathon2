@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -18,14 +19,23 @@ import java.util.List;
 public class MarkupDAO {
 
     private JdbcTemplate jdbcTemplate;
-
+	private String user;
+	private String password;
+	private String url;
+	private String table;
+	
     public MarkupDAO(DataSource ds) {
-        this.jdbcTemplate = new JdbcTemplate(ds);
+		this.user = "sa";
+		this.password = "";
+		this.url = "jdbc:hsqldb:hsql://localhost/xdb";
+		this.table = "UserPronounPreferences";
+        //this.jdbcTemplate = new JdbcTemplate(ds);
         BasicDataSource ds1 = new BasicDataSource();
-        ds1.setDriverClassName("oracle.jdbc.driver.OracleDriver");
-        ds1.setUsername("scott");
-        ds1.setPassword("tiger");
-        ds1.setUrl("");
+        ds1.setDriverClassName("org.hsqldb.jdbcDriver");
+        ds1.setUsername(user);
+        ds1.setPassword(password);
+        ds1.setUrl(url);
+        this.jdbcTemplate = new JdbcTemplate(ds1);
     }
 
     public UserPronounPreferences loadUserPronounPreferences(final String userId) {
@@ -55,4 +65,14 @@ public class MarkupDAO {
                 userPronounPreferences.getPronouns().getTheir(), userPronounPreferences.getPronouns().getThemselves(), userPronounPreferences.getPronouns().getTheirs());
 
     }
+
+	private void dropTable() {
+	    String dropTableSql = "Drop TABLE " + table + ";";
+	    jdbcTemplate.execute(dropTableSql);		
+	}
+	
+	private void createTable() {
+	    String createTableSql = "CREATE TABLE UserPronounPreferences(userId varchar(255) PRIMARY KEY, they varchar(255),them varchar(255),their varchar(255),themselves varchar(255),theirs varchar(255));";
+	    jdbcTemplate.execute(createTableSql);
+	}
 }
